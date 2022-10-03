@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0-windows7.0</TargetFramework>
+    <ApplicationIcon>favicon.ico</ApplicationIcon>
+    <StartupObject>WorldHash.Program</StartupObject>
+    <AssemblyName>WorldHash</AssemblyName>
+    <RootNamespace>WorldHash</RootNamespace>
+    <Copyright />
+    <Authors>trmid, Ncookie</Authors>
+    <Company>World Hash</Company>
+    <Product>World Hash</Product>
+    <Description>Command Line Windows Installer for World Hash.</Description>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+</Project>
