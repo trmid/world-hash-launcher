@@ -33,7 +33,8 @@ namespace WorldHash
         static void InstallLatest()
         {
             string zipFilename = "world-hash.zip";
-            Log("Could not find package. Beginning Installation...");
+            string? configStr = null;
+            Log("Beginning Installation...");
             Log("Cleaning directory...");
             if (File.Exists(zipFilename))
             {
@@ -43,7 +44,7 @@ namespace WorldHash
             if (Directory.Exists(AppDir))
             {
                 Log("Cleaning current installation...");
-                string? configStr = null;
+                
                 if (File.Exists(ConfigFilename))
                 {
                     Log("Backing up configuration...");
@@ -51,11 +52,6 @@ namespace WorldHash
                 }
                 Log("Removing old installation...");
                 Directory.Delete(AppDir, true);
-                if(configStr != null)
-                {
-                    Log("Restoring configuration...");
-                    File.WriteAllText(ConfigFilename, configStr);
-                }
             }
             Log("Downloading package. This may take a minute...");
             var client = new WebClient();
@@ -64,6 +60,11 @@ namespace WorldHash
             ZipFile.ExtractToDirectory(zipFilename, "./");
             Log("Cleaning directory...");
             File.Delete(zipFilename);
+            if (configStr != null)
+            {
+                Log("Restoring configuration...");
+                File.WriteAllText(ConfigFilename, configStr);
+            }
             Log("Installing dependencies...");
             RunCmd("cmd", "/c npm i", AppDir);
             RunCmd("cmd", "/c npm run build", AppDir);
@@ -153,7 +154,7 @@ namespace WorldHash
             if (!File.Exists(ConfigFilename))
             {
                 Log("Configuration not found.");
-                Console.WriteLine("\n######################################################################");
+                Console.WriteLine("\n######################################################################\n");
                 Console.WriteLine("Please provide the following configuration options:\nPress ENTER to accept the default in brackets.\n");
                 Config config = new Config();
                 config.IPFS_API = GetResponse("IPFS API URL:", "http://localhost:5001/");
@@ -162,7 +163,7 @@ namespace WorldHash
                 config.MINECRAFT_SAVES_DIR = GetResponse("Minecraft Saves Directory:", Path.Combine(System.Environment.GetEnvironmentVariable("appdata"), ".minecraft\\saves"));
                 config.MINECRAFT_SHORTCUT = GetResponse("Minecraft Shortcut:", "optional");
                 if (config.MINECRAFT_SHORTCUT.Equals("optional")) config.MINECRAFT_SHORTCUT = null;
-                Console.WriteLine("######################################################################\n");
+                Console.WriteLine("\n######################################################################\n");
 
                 // Save file:
                 Log("Saving configuration...");
